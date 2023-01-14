@@ -1,5 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const Memory = require('./memory');
+const mem = new Memory();
 const app = express();
 const port = 3000;
 

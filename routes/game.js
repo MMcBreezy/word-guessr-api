@@ -6,6 +6,7 @@ const { Game } = require('../objects')
 // all routes in this file begin with /game
 
 // POST /game
+// Create a new game
 router.post('/', (req, res) => {
   console.log('POST /game')
 
@@ -27,12 +28,14 @@ router.use('/:id', (req, res, next) => {
     req.game = game
     next()
   } else {
+    console.log('Game not found')
     res.status(404).send()
   }
 })
 // END middleware to attach a game to the request
 
 // GET /game/:id
+// Get the state of a game
 router.get('/:id', (req, res) => {
   const game = req.game
 
@@ -40,6 +43,7 @@ router.get('/:id', (req, res) => {
 })
 
 // POST /game/:id/guess
+// Make a guess
 router.post('/:id/guess', (req, res) => {
   const guess = req.body.guess  // TODO: validate guess
   const game = req.game

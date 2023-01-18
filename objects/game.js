@@ -16,14 +16,51 @@ class Game {
 
   slim() {
     return {
-      game_id: this.id,
+      id: this.id,
       letters: this.letters,
       guesses: this.guesses,
       guessesRemaining: this.guessesRemaining,
+      userWon: this.userWon(),
+      userLost: this.userLost(),
+      userFinished: this.userFinished(),
+      revealedWord: this.revealedWord(),
     }
   }
 
+  guess(letter) {
+    if (this.guesses.includes(letter)) {
+      return
+    }
 
+    this.guesses.push(letter)
+    this.guesses = this.guesses.sort()
+
+    if (this.word.includes(letter)) {
+      this.word.split('').forEach((wordLetter, index) => {
+        if (wordLetter === letter) {
+          this.letters[index] = letter
+        }
+      })
+    } else {
+      this.guessesRemaining -= 1
+    }
+  }
+
+  userWon() {
+    return !this.letters.includes(null)
+  }
+
+  userLost() {
+    return this.guessesRemaining === 0 && this.letters.includes(null)
+  }
+  
+  userFinished() {
+    return this.userWon() || this.userLost()
+  }
+
+  revealedWord() {
+    return this.userFinished() ? this.word : null
+  }
 }
 
 module.exports = Game

@@ -16,17 +16,42 @@ router.post('/', (req, res) => {
   res.status(201).json({data: game.slim()})
 })
 
-// GET /game/:game_id
-router.get('/:game_id', (req, res) => {
-  console.log('GET /game/:game_id');
+// BEGIN middleware to attach a game to the request
+// Routes below this line require a valid id
+router.use('/:id', (req, res, next) => {
+  const id = req.params.id // TODO: validate id
+  console.log(`id: ${id}`)
+  const game = req.games.get(id)
 
-  const game = req.games.get(req.params.game_id)
   if (game) {
-    res.json({data: game.slim()})
+    req.game = game
+    next()
   } else {
     res.status(404).send()
   }
 })
+// END middleware to attach a game to the request
 
+// GET /game/:id
+router.get('/:id', (req, res) => {
+  const game = req.game
+
+  res.json({data: game.slim()})
+})
+
+// POST /game/:id/guess
+router.post('/:id/guess', (req, res) => {
+  const guess = req.body.guess  // TODO: validate guess
+  const game = req.game
+  console.log(`POST /game/${game.id}/guess`, guess)
+
+  game.guess(guess)
+
+  if (game.userFinished()) {
+    req.games.delete(game.id)
+  }
+  
+  res.json({data: game.slim()})
+})
 
 module.exports = router

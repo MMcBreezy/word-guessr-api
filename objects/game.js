@@ -14,7 +14,9 @@ class Game {
     this.guessesRemaining = 6
   }
 
-  slim() {
+  // This is a method that returns a "slim" version of the object
+  // not including the word.
+  state() {
     return {
       id: this.id,
       letters: this.letters,

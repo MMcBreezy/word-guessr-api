@@ -1,6 +1,6 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 
-router.use('/game', require('./game'));
+router.use('/game', require('./game'))
 
-module.exports = router;
+module.exports = router

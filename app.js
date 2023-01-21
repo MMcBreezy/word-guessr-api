@@ -2,7 +2,6 @@ const express = require('express')
 
 // initialize the express app
 const app = express()
-const port = 3000;
 
 // intialize the games storage
 const Memory = require('./memory')
@@ -23,6 +22,4 @@ app.use(express.json())
 const routes = require('./routes')
 app.use(routes)
 
-app.listen(port, () => {
-  console.log(`word-guessr-api listening at http://localhost:${port}`)
-})
+module.exports = app

@@ -5,8 +5,8 @@ let mem
 
 describe('Memory', () => {
   beforeEach(() => {
-    mem = new Memory()
     jest.clearAllTimers()
+    mem = new Memory()
   })
 
   it('should set and get a value', () => {
@@ -30,12 +30,34 @@ describe('Memory', () => {
       expect(mem.expiration('foo')).toEqual(Date.now() + defaultExpiration)
     })
 
-    it('should renew the expiration time by three days if get is called', () => {
+    it('should renew the expiration time by three days if get() is called', () => {
       mem.set('foo', 'bar')
       const advanceTimeBy = 10000
       jest.advanceTimersByTime(advanceTimeBy)
       mem.get('foo') 
       expect(mem.expiration('foo')).toEqual(Date.now() + defaultExpiration)
+    })
+
+    it('should call checkExpiration every 1 day', () => {
+      const spy = jest.spyOn(mem, 'checkExpirations')
+      jest.advanceTimersByTime(86400000)
+      expect(spy).toHaveBeenCalledTimes(1)
+      jest.advanceTimersByTime(86400000)
+      expect(spy).toHaveBeenCalledTimes(2)
+    })
+
+    it('should deleted the key if expired', () => {
+      mem.set('foo', 'bar')
+      const advanceTimeBy = defaultExpiration + 86400000
+      jest.advanceTimersByTime(advanceTimeBy)
+      expect(mem.get('foo')).toBeNull()
+    })
+
+    it('should not delete the key if not expired', () => {
+      mem.set('foo', 'bar')
+      const advanceTimeBy = defaultExpiration - 86400000
+      jest.advanceTimersByTime(advanceTimeBy)
+      expect(mem.get('foo')).toEqual('bar')
     })
   })
 });

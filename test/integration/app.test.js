@@ -4,7 +4,7 @@ const { app, games } = require('../../app')
 // This is an unfortunate hack to stop the expiration job from running
 // once the tests are done.
 afterAll(() => {
-  clearInterval(games.expirationJob)
+  games.stopExpirationJob()
 })
 
 describe('app', () => {

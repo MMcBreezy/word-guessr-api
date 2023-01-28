@@ -1,4 +1,5 @@
 const request = require('supertest')
+const uuid = require('uuid')
 const { app, games } = require('../../app')
 const { wordHelper } = require('../../helpers')
 
@@ -10,6 +11,7 @@ afterAll(() => {
 
 describe('/game', () => {
   let game
+  const nonexisting_valid_id = uuid.v4()
 
   beforeEach(() => {
     jest.spyOn(wordHelper, 'getRandomWord').mockReturnValue('foo')
@@ -52,8 +54,14 @@ describe('/game', () => {
     })
 
     it('should return 404 if the game does not exist', async () => {
-      const response = await request(app).get(`/game/does-not-exist`)
+      const response = await request(app).get(`/game/${nonexisting_valid_id}`)
       expect(response.statusCode).toBe(404)
+    })
+
+    it('should return a 400 if the game id is invalid', async () => {
+      const invalidId = 'invalid-id'
+      const response = await request(app).get(`/game/${invalidId}`)
+      expect(response.statusCode).toBe(400)
     })
   })
 
@@ -76,7 +84,7 @@ describe('/game', () => {
     })
 
     it('should return 404 if the game does not exist', async () => {
-      const response = await request(app).post(`/game/does-not-exist/guess`).send({guess: 'f'})
+      const response = await request(app).post(`/game/${nonexisting_valid_id}/guess`).send({guess: 'f'})
       expect(response.statusCode).toBe(404)
     })
 

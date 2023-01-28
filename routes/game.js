@@ -1,4 +1,5 @@
 const express = require('express')
+const uuid = require('uuid')
 const router = express.Router()
 
 const { Game } = require('../objects')
@@ -20,7 +21,12 @@ router.post('/', (req, res) => {
 // BEGIN middleware to attach a game to the request
 // Routes below this line require a valid id
 router.use('/:id', (req, res, next) => {
-  const id = req.params.id // TODO: validate id
+  const id = req.params.id
+
+  if (!uuid.validate(id)) {
+    console.log('Invalid id', id)
+    return res.status(400).send()
+  }
   console.log(`id: ${id}`)
   const game = req.games.get(id)
 

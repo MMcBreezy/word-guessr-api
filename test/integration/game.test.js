@@ -83,6 +83,35 @@ describe('/game', () => {
       })
     })
 
+    it('should return a 400 if the game id is invalid', async () => {
+      const invalidId = 'invalid-id'
+      const response = await request(app).get(`/game/${invalidId}`)
+      expect(response.statusCode).toBe(400)
+    })
+
+    it('should return 400 if the guess is invalid', async () => {
+      const createResponse = await request(app).post('/game')
+      const game = createResponse.body.data
+      [ {guess: ''},
+        {guess: 'fo'},
+        {guess: 3 },
+        {guess: true},
+        {guess: null},
+        {guess: undefined},
+        {guess: []},
+        {guess: {}},
+        {guess: 'foo'},
+        {guess: { foo: 'bar' }},
+      ].forEach(async (guess) => {
+        const response = await request(app).post(`/game/${game.id}/guess`).send(guess)
+        expect(response.statusCode).toBe(400)
+        const errors = JSON.parse(response.text).errors
+        expect(errors[0].location).toBe("body")
+        expect(errors[0].param).toBe("guess")
+        expect(errors[0].msg).toBe("Invalid value")
+      })
+    })
+
     it('should return 404 if the game does not exist', async () => {
       const response = await request(app).post(`/game/${nonexisting_valid_id}/guess`).send({guess: 'f'})
       expect(response.statusCode).toBe(404)

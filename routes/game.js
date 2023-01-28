@@ -1,4 +1,5 @@
 const express = require('express')
+const { body, validationResult } = require('express-validator')
 const uuid = require('uuid')
 const router = express.Router()
 
@@ -50,18 +51,27 @@ router.get('/:id', (req, res) => {
 
 // POST /game/:id/guess
 // Make a guess
-router.post('/:id/guess', (req, res) => {
-  const guess = req.body.guess  // TODO: validate guess
-  const game = req.game
-  console.log(`POST /game/${game.id}/guess`, guess)
+router.post('/:id/guess',
+  body('guess').isLength({min: 1, max: 1}).isAlpha(),
+  (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      console.log('Invalid guess', req.body.guess)
+      return res.status(400).json({ errors: errors.array() })
+    }
 
-  game.guess(guess)
+    const guess = req.body.guess
+    const game = req.game
+    console.log(`POST /game/${game.id}/guess`, guess)
 
-  if (game.userFinished()) {
-    req.games.delete(game.id)
-  }
-  
-  res.json({data: game.state()})
-})
+    game.guess(guess)
+
+    if (game.userFinished()) {
+      req.games.delete(game.id)
+    }
+    
+    res.json({data: game.state()})
+  },
+)
 
 module.exports = router

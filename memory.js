@@ -7,6 +7,8 @@ const defaultExpiration = 259200000 // 3 days
 const checkExpirationInterval = 86400000 // 1 day
 
 class Memory {
+  expirationJob
+
   constructor () {
     this.memory = {}
     this.startExpirationJob()
@@ -42,7 +44,11 @@ class Memory {
   }
 
   startExpirationJob() {
-    setInterval(() => this.checkExpirations(), checkExpirationInterval)
+    this.expirationJob = setInterval(() => this.checkExpirations(), checkExpirationInterval)
+  }
+
+  stopExpirationJob() {
+    clearInterval(this.expirationJob)
   }
 
   checkExpirations = () => {

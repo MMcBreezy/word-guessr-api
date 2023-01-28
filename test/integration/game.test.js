@@ -1,6 +1,12 @@
 const request = require('supertest')
-const app = require('../../app')
+const { app, games } = require('../../app')
 const { wordHelper } = require('../../helpers')
+
+// This is an unfortunate hack to stop the expiration job from running
+// once the tests are done.
+afterAll(() => {
+  clearInterval(games.expirationJob)
+})
 
 describe('/game', () => {
   let game

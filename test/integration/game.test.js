@@ -6,7 +6,7 @@ const { wordHelper } = require('../../helpers')
 // This is an unfortunate hack to stop the expiration job from running
 // once the tests are done.
 afterAll(() => {
-  clearInterval(games.expirationJob)
+  games.stopExpirationJob()
 })
 
 describe('/game', () => {
@@ -92,7 +92,8 @@ describe('/game', () => {
     it('should return 400 if the guess is invalid', async () => {
       const createResponse = await request(app).post('/game')
       const game = createResponse.body.data
-      [ {guess: ''},
+      const invalid_guesses = [
+        {guess: ''},
         {guess: 'fo'},
         {guess: 3 },
         {guess: true},
@@ -101,14 +102,15 @@ describe('/game', () => {
         {guess: []},
         {guess: {}},
         {guess: 'foo'},
-        {guess: { foo: 'bar' }},
-      ].forEach(async (guess) => {
-        const response = await request(app).post(`/game/${game.id}/guess`).send(guess)
-        expect(response.statusCode).toBe(400)
-        const errors = JSON.parse(response.text).errors
-        expect(errors[0].location).toBe("body")
-        expect(errors[0].param).toBe("guess")
-        expect(errors[0].msg).toBe("Invalid value")
+        {guess: { foo: 'bar' }} ]
+
+      invalid_guesses.forEach(async (guess) => {
+          const response = await request(app).post(`/game/${game.id}/guess`).send(guess)
+          expect(response.statusCode).toBe(400)
+          const errors = JSON.parse(response.text).errors
+          expect(errors[0].location).toBe("body")
+          expect(errors[0].param).toBe("guess")
+          expect(errors[0].msg).toBe("Invalid value")
       })
     })
 

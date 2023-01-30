@@ -23,7 +23,8 @@ describe('Memory', () => {
   });
 
   describe('expiration', () => {
-    const defaultExpiration = 259200000 // 3 days
+    const oneDay = 86400000
+    const defaultExpiration = oneDay * 3 // 3 days
 
     it('should set an expiration time of 3 days', () => {
       mem.set('foo', 'bar')
@@ -40,24 +41,31 @@ describe('Memory', () => {
 
     it('should call checkExpiration every 1 day', () => {
       const spy = jest.spyOn(mem, 'checkExpirations')
-      jest.advanceTimersByTime(86400000)
+      jest.advanceTimersByTime(oneDay)
       expect(spy).toHaveBeenCalledTimes(1)
-      jest.advanceTimersByTime(86400000)
+      jest.advanceTimersByTime(oneDay)
       expect(spy).toHaveBeenCalledTimes(2)
     })
 
     it('should deleted the key if expired', () => {
       mem.set('foo', 'bar')
-      const advanceTimeBy = defaultExpiration + 86400000
+      const advanceTimeBy = defaultExpiration + oneDay
       jest.advanceTimersByTime(advanceTimeBy)
       expect(mem.get('foo')).toBeNull()
     })
 
     it('should not delete the key if not expired', () => {
       mem.set('foo', 'bar')
-      const advanceTimeBy = defaultExpiration - 86400000
+      const advanceTimeBy = defaultExpiration - oneDay
       jest.advanceTimersByTime(advanceTimeBy)
       expect(mem.get('foo')).toEqual('bar')
+    })
+
+    it('should stop the expiration job when stopExpirationJob is called', () => {
+      const spy = jest.spyOn(mem, 'checkExpirations')
+      mem.stopExpirationJob()
+      jest.advanceTimersByTime(oneDay)
+      expect(spy).toHaveBeenCalledTimes(0)
     })
   })
 });

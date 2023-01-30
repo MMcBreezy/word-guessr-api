@@ -1,9 +1,17 @@
 const request = require('supertest')
-const app = require('../../app')
+const uuid = require('uuid')
+const { app, games } = require('../../app')
 const { wordHelper } = require('../../helpers')
+
+// This is an unfortunate hack to stop the expiration job from running
+// once the tests are done.
+afterAll(() => {
+  games.stopExpirationJob()
+})
 
 describe('/game', () => {
   let game
+  const nonexisting_valid_id = uuid.v4()
 
   beforeEach(() => {
     jest.spyOn(wordHelper, 'getRandomWord').mockReturnValue('foo')
@@ -46,8 +54,14 @@ describe('/game', () => {
     })
 
     it('should return 404 if the game does not exist', async () => {
-      const response = await request(app).get(`/game/does-not-exist`)
+      const response = await request(app).get(`/game/${nonexisting_valid_id}`)
       expect(response.statusCode).toBe(404)
+    })
+
+    it('should return a 400 if the game id is invalid', async () => {
+      const invalidId = 'invalid-id'
+      const response = await request(app).get(`/game/${invalidId}`)
+      expect(response.statusCode).toBe(400)
     })
   })
 
@@ -69,8 +83,39 @@ describe('/game', () => {
       })
     })
 
+    it('should return a 400 if the game id is invalid', async () => {
+      const invalidId = 'invalid-id'
+      const response = await request(app).get(`/game/${invalidId}`)
+      expect(response.statusCode).toBe(400)
+    })
+
+    it('should return 400 if the guess is invalid', async () => {
+      const createResponse = await request(app).post('/game')
+      const game = createResponse.body.data
+      const invalid_guesses = [
+        {guess: ''},
+        {guess: 'fo'},
+        {guess: 3 },
+        {guess: true},
+        {guess: null},
+        {guess: undefined},
+        {guess: []},
+        {guess: {}},
+        {guess: 'foo'},
+        {guess: { foo: 'bar' }} ]
+
+      invalid_guesses.forEach(async (guess) => {
+          const response = await request(app).post(`/game/${game.id}/guess`).send(guess)
+          expect(response.statusCode).toBe(400)
+          const errors = JSON.parse(response.text).errors
+          expect(errors[0].location).toBe("body")
+          expect(errors[0].param).toBe("guess")
+          expect(errors[0].msg).toBe("Invalid value")
+      })
+    })
+
     it('should return 404 if the game does not exist', async () => {
-      const response = await request(app).post(`/game/does-not-exist/guess`).send({guess: 'f'})
+      const response = await request(app).post(`/game/${nonexisting_valid_id}/guess`).send({guess: 'f'})
       expect(response.statusCode).toBe(404)
     })
 

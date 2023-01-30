@@ -1,5 +1,11 @@
 const request = require('supertest')
-const app = require('../../app')
+const { app, games } = require('../../app')
+
+// This is an unfortunate hack to stop the expiration job from running
+// once the tests are done.
+afterAll(() => {
+  games.stopExpirationJob()
+})
 
 describe('app', () => {
   describe('GET /heartbeat', () => {

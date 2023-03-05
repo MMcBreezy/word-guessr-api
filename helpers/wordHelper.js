@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-const wordLibraryPath = 'assets/wordLibrary.txt'
+const wordLibraryPath = 'assets/wordList.txt'
 const wordCount = 58109 // This is the number of words in the word library
 
 class WordHelper {

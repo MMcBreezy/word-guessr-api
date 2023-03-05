@@ -1,7 +1,7 @@
 const fs = require('fs')
 
 const wordLibraryPath = 'assets/wordList.txt'
-const wordCount = 58109 // This is the number of words in the word library
+const wordCount = 29800 // This is the number of words in the word list
 
 class WordHelper {
   static getRandomWord = () => {

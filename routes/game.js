@@ -16,7 +16,7 @@ router.post('/', (req, res) => {
   const game = new Game()
   req.games.set(game.id, game)
 
-  res.status(201).json({data: game.state()})
+  res.status(201).json(game.state())
 })
 
 // BEGIN middleware to attach a game to the request
@@ -46,7 +46,7 @@ router.use('/:id', (req, res, next) => {
 router.get('/:id', (req, res) => {
   const game = req.game
 
-  res.json({data: game.state()})
+  res.json(game.state())
 })
 
 // POST /game/:id/guess
@@ -70,7 +70,7 @@ router.post('/:id/guess',
       req.games.delete(game.id)
     }
     
-    res.json({data: game.state()})
+    res.json(game.state())
   },
 )
 

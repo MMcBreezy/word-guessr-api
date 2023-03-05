@@ -3,6 +3,12 @@ const uuid = require('uuid')
 const { app, games } = require('../../app')
 const { wordHelper } = require('../../helpers')
 
+
+beforeEach(() => {
+  jest.clearAllMocks()
+})
+
+
 // This is an unfortunate hack to stop the expiration job from running
 // once the tests are done.
 afterAll(() => {
@@ -22,7 +28,7 @@ describe('/game', () => {
     it('should create a new game', async () => {
       const response = await request(app).post('/game')
       expect(response.statusCode).toBe(201)
-      expect(response.body.data).toEqual({
+      expect(response.body).toEqual({
         id: expect.any(String),
         letters: [null, null, null],
         guesses: [],
@@ -38,10 +44,10 @@ describe('/game', () => {
   describe('GET /:id', () => {
     it('should return the state of the game', async () => {
       const createResponse = await request(app).post('/game')
-      const game = createResponse.body.data
+      const game = createResponse.body
       const response = await request(app).get(`/game/${game.id}`)
       expect(response.statusCode).toBe(200)
-      expect(response.body.data).toEqual({
+      expect(response.body).toEqual({
         id: game.id,
         letters: [null, null, null],
         guesses: [],
@@ -68,10 +74,10 @@ describe('/game', () => {
   describe('POST /:id/guess', () => {
     it('should make a guess', async () => {
       const createResponse = await request(app).post('/game')
-      const game = createResponse.body.data
+      const game = createResponse.body
       const response = await request(app).post(`/game/${game.id}/guess`).send({guess: 'f'})
       expect(response.statusCode).toBe(200)
-      expect(response.body.data).toEqual({
+      expect(response.body).toEqual({
         id: game.id,
         letters: ['f', null, null],
         guesses: ['f'],
@@ -91,7 +97,7 @@ describe('/game', () => {
 
     it('should return 400 if the guess is invalid', async () => {
       const createResponse = await request(app).post('/game')
-      const game = createResponse.body.data
+      const game = createResponse.body
       const invalid_guesses = [
         {guess: ''},
         {guess: 'fo'},
@@ -121,12 +127,12 @@ describe('/game', () => {
 
     it('should delete the game if it is finished', async () => {
       const createResponse = await request(app).post('/game')
-      const game = createResponse.body.data
+      const game = createResponse.body
       let response = await request(app).post(`/game/${game.id}/guess`).send({guess: 'f'})
       expect(response.statusCode).toBe(200)
       response = await request(app).post(`/game/${game.id}/guess`).send({guess: 'o'})
       expect(response.statusCode).toBe(200)
-      expect(response.body.data).toEqual({
+      expect(response.body).toEqual({
         id: game.id,
         letters: ['f', 'o', 'o'],
         guesses: ['f', 'o'],

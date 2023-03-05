@@ -8,7 +8,6 @@ beforeEach(() => {
   jest.clearAllMocks()
 })
 
-
 // This is an unfortunate hack to stop the expiration job from running
 // once the tests are done.
 afterAll(() => {

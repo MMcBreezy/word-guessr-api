@@ -4,9 +4,7 @@ const { app, games } = require('../../app')
 const { wordHelper } = require('../../helpers')
 
 
-beforeEach(() => {
-  jest.clearAllMocks()
-})
+afterEach(() => jest.restoreAllMocks())
 
 // This is an unfortunate hack to stop the expiration job from running
 // once the tests are done.

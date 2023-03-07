@@ -13,7 +13,6 @@ afterEach(() => jest.restoreAllMocks())
 
 describe('wordHelper', () => {
   describe('getRandomWord', () => {
-    // TODO: fix this test
     it('should return a random word', () => {
       const word = wordHelper.getRandomWord()
 

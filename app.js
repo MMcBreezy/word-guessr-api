@@ -4,10 +4,20 @@ const cors = require('cors')
 // initialize the express app
 const app = express()
 
+const whitelist = [undefined, 'http://localhost:3000', 'ANOTHER THING!']
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
 // enable CORS
-app.use(cors({
-  origin: 'http://localhost:3000'
-}))
+app.use(cors(corsOptions))
 
 // intialize the games storage
 const Memory = require('./memory')

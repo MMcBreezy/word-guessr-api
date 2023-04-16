@@ -5,4 +5,3 @@ curl -sL https://rpm.nodesource.com/setup_14.x | sudo bash -
 sudo yum -y install nodejs
 sudo npm install -g nodemon
 sudo mkdir /home/ec2-user/hangman-api
-cd /home/ec2-user/hangman-api

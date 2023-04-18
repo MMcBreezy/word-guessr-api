@@ -3,14 +3,17 @@
 // A super super simple in-memory cache that will get reset if the server ever restarts.
 // Also, it will expire after 3 days if not accessed.
 // DANGER: This is not a good way to store data in production. This is just for learning purposes.
+// This is not safe to use if multithreading is involved.
 const defaultExpiration = 259200000 // 3 days
 const checkExpirationInterval = 86400000 // 1 day
 
 class Memory {
   expirationJob
+  size
 
   constructor () {
     this.memory = {}
+    this.size = 0
     this.startExpirationJob()
   }
 
@@ -29,10 +32,14 @@ class Memory {
       value: value,
       expiration: Date.now() + defaultExpiration
     }
+    this.size++
   }
 
   delete (key) {
-    delete this.memory[key]
+    if (this.memory[key] !== undefined) {
+      delete this.memory[key]
+      this.size--
+    }
   }
 
   expiration(key) {

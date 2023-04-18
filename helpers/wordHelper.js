@@ -1,12 +1,14 @@
 const fs = require('fs')
 
 const wordListPath = 'assets/wordList.txt'
-const wordCount = 29800 // This is the number of words in the word list
+let words = null
 
 class WordHelper {
   static getRandomWord = () => {
-    const randomWordIndex = Math.ceil(Math.random() * wordCount)
-    const words = fs.readFileSync(wordListPath, 'utf-8').split("\n")
+    if (!words) {
+      words = fs.readFileSync(wordListPath, 'utf-8').split("\n")
+    }
+    const randomWordIndex = Math.floor(Math.random() * words.length)
 
     return words[randomWordIndex]
   }

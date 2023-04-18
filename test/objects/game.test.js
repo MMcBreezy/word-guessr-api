@@ -3,13 +3,15 @@ const { wordHelper } = require('../../helpers')
 
 describe('Game', () => {
   // for all of the tests, the given word will be "foo"
-  const wordHelperSpy = jest.spyOn(wordHelper, 'getRandomWord').mockReturnValue('foo')
+  let wordHelperSpy
   let game
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    wordHelperSpy = jest.spyOn(wordHelper, 'getRandomWord').mockReturnValue('foo')
     game = new Game()
   })
+
+  afterEach(() => jest.restoreAllMocks())
 
   it('should create a new game', () => {
     expect(game.id).toBeDefined()

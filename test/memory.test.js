@@ -22,6 +22,22 @@ describe('Memory', () => {
     expect(mem.get('foo')).toBeNull();
   });
 
+  it('should increment and decrement the size property', () => {
+    expect(mem.size).toEqual(0)
+
+    mem.set('foo', 'bar')
+    expect(mem.size).toEqual(1)
+
+    mem.set('baz', 'qux')
+    expect(mem.size).toEqual(2)
+
+    mem.delete('foo')
+    expect(mem.size).toEqual(1)
+
+    mem.delete('baz')
+    expect(mem.size).toEqual(0)
+  })
+
   describe('expiration', () => {
     const oneDay = 86400000
     const defaultExpiration = oneDay * 3 // 3 days

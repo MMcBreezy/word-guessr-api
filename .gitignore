@@ -1,7 +1,7 @@
 /node_modules
 /coverage
-terraform/.terraform/providers/registry.terraform.io/hashicorp/aws/4.62.0/darwin_amd64/terraform-provider-aws_v4.62.0_x5
-terraform/terraform.tfstate
-terraform/terraform.tfstate.backup
-terraform/.terraform.tfstate.lock.info
-terraform/.terraform.lock.hcl
+/terraform/.terraform/providers/registry.terraform.io/hashicorp/aws/4.62.0/darwin_amd64/terraform-provider-aws_v4.62.0_x5
+/terraform/terraform.tfstate
+/terraform/terraform.tfstate.backup
+/terraform/.terraform.tfstate.lock.info
+.terraform.lock.hcl

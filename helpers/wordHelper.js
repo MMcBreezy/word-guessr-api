@@ -14,4 +14,5 @@ class WordHelper {
   }
 }
 
+
 module.exports = WordHelper

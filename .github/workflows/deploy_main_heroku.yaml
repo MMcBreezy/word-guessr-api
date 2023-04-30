@@ -11,6 +11,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          branch: main
+          branch: "main"
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: "word-guessr-api"
+          heroku_email: "michaelmcbride85@gmail.com"

@@ -5,7 +5,7 @@ const cors = require('cors')
 const app = express()
 
 // TODO: use env vars instead of a whitelist
-const whitelist = [undefined, 'http://localhost:3000', 'ANOTHER THING!']
+const whitelist = [undefined, 'http://localhost:3000', 'http://word-guessr.s3-website-us-east-1.amazonaws.com']
 
 const corsOptions = {
   origin: function (origin, callback) {

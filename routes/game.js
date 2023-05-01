@@ -69,8 +69,11 @@ router.post('/:id/guess',
     if (game.userFinished()) {
       req.games.delete(game.id)
     }
+
+    const state = game.state()
+    console.log({state})
     
-    res.json(game.state())
+    res.json(state)
   },
 )
 

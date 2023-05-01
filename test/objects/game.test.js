@@ -58,6 +58,12 @@ describe('Game', () => {
       expect(game.guesses).toEqual(['f', 'o'])
     })
 
+    it('should not be case-sensitive when guessing', () => {
+      game.guess('F')
+
+      expect(game.guesses).toEqual(['f'])
+    })
+
     it('should sort guessed letters alphabetically', () => {
       const expectedGuesses = ['a', 'b', 'c']
       game.guess('c')

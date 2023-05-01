@@ -29,7 +29,9 @@ class Game {
     }
   }
 
-  guess(letter) {
+  guess(character) {
+    const letter = character.toLowerCase()
+
     if (this.guesses.includes(letter)) {
       return
     }

@@ -65,25 +65,18 @@ curl -X POST -H "Content-Type: application/json" -d '{"guess": "A"}' http://loca
 The guess should be a single alphanumeric character. You'll get a JSON response indicating the game's current state.
 
 Example of a JSON object of a completed game state:
+
 ```json
-state: {
-    "id": "37a8a959-b2ca-4c89-ba52-deea7cfdfe08",
-    "letters": [
-      null, null, "'a'",
-      null, "'n'",  null,
-      null
-    ],
-    "guesses": [
-      "'a'", "'d'", "'e'",
-      "'f'", "'n'", "'r'",
-      "'s'", "'t'"
-    ],
-    "guessesRemaining": 0,
-    "userWon": false,
-    "userLost": true,
-    "userFinished": true,
-    "revealedWord": "'plainly'"
-  }
+{
+  "id": "37a8a959-b2ca-4c89-ba52-deea7cfdfe08",
+  "letters": [null, null, "'a'", null, "'n'", null, null],
+  "guesses": ["'a'", "'d'", "'e'", "'f'", "'n'", "'r'", "'s'", "'t'"],
+  "guessesRemaining": 0,
+  "userWon": false,
+  "userLost": true,
+  "userFinished": true,
+  "revealedWord": "'plainly'"
+}
 ```
 
 ## Architecture
@@ -93,12 +86,15 @@ state: {
 Handles the logic for individual games, including managing guesses and tracking state.
 
 ### Memory Class
+
 A simple in-memory database that stores game states.
 
 ### Word Helper
+
 Provides random words for the game.
 
 ### React Frontend
+
 Please check the [React repository](https://github.com/MMcBreezy/word-guessr-react) for details on the frontend UI.
 
 ## Contributing

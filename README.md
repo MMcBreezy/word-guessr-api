@@ -10,14 +10,13 @@ This repository contains a Node.js API for a simple guessing game. You can creat
   - [Get Game State](#get-game-state)
   - [Make a Guess](#make-a-guess)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Installation
 
 First, make sure you have Node.js and npm installed. Then, clone this repository:
 
 ```bash
-git clone https://github.com/yourusername/yourrepository.git
+git clone https://github.com/MMcBreezy/word-guessr-api.git
 ```
 
 Navigate to the directory and install the dependencies:

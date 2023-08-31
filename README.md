@@ -36,6 +36,8 @@ npm start
 
 ### Create a New Game
 
+<!-- Needs update for React UI -->
+
 To create a new game, send a POST request to `/game`.
 
 ```bash
@@ -46,6 +48,8 @@ You will get a JSON response with the game's current state.
 
 ### Get Game State
 
+<!-- Needs update for React UI -->
+
 To get the state of a game, send a GET request to `/game/:id`.
 
 Replace `:id` with the game's ID.
@@ -55,6 +59,8 @@ curl -X GET http://localhost:3000/game/YOUR_GAME_ID
 ```
 
 ### Make a Guess
+
+<!-- Needs update for React UI -->
 
 To make a guess, send a POST request to `/game/:id/guess` with the `guess` parameter.
 

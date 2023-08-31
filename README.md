@@ -1,34 +1,35 @@
-# Node API for Simple Game
+# Node API for Word Guessr 🎮
 
-This repository contains a Node.js API for a simple guessing game. You can create a new game, get its state, and make a guess.
+This repository contains the Node.js backend API for Word Guessr, a simple word guessing game. The backend is designed to handle game logic such as creating new games, tracking game state, and managing guesses. A [React repository](https://github.com/MMcBreezy/word-guessr-react) is available for the frontend UI.
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Create a New Game](#create-a-new-game)
-  - [Get Game State](#get-game-state)
-  - [Make a Guess](#make-a-guess)
-- [Contributing](#contributing)
+1. [Features](#features)
+2. [Installation](#installation)
+3. [Usage](#usage)
+   - [Create a New Game](#create-a-new-game)
+   - [Get Game State](#get-game-state)
+   - [Make a Guess](#make-a-guess)
+4. [Architecture](#architecture)
+   - [Game Class](#game-class)
+   - [Memory Class](#memory-class)
+   - [Word Helper](#word-helper)
+5. [React Frontend](#react-frontend)
+6. [Contributing](#contributing)
+
+## Features
+
+- Create a new game
+- Get the state of a specific game by ID
+- Make a guess in a game
+- Stateless server design using a simple in-memory database
 
 ## Installation
 
-First, make sure you have Node.js and npm installed. Then, clone this repository:
-
 ```bash
-git clone https://github.com/MMcBreezy/word-guessr-api.git
-```
-
-Navigate to the directory and install the dependencies:
-
-```bash
-cd yourrepository
+git clone https://github.com/YourUsername/word-guessr-api.git
+cd word-guessr-api
 npm install
-```
-
-Start the server:
-
-```bash
 npm start
 ```
 
@@ -36,41 +37,69 @@ npm start
 
 ### Create a New Game
 
-<!-- Needs update for React UI -->
-
-To create a new game, send a POST request to `/game`.
+Send a POST request to /game.
 
 ```bash
-curl -X POST http://localhost:3000/game
+curl -X POST http://localhost:3001/game
 ```
 
 You will get a JSON response with the game's current state.
 
 ### Get Game State
 
-<!-- Needs update for React UI -->
-
-To get the state of a game, send a GET request to `/game/:id`.
-
-Replace `:id` with the game's ID.
+Send a GET request to /game/:id, replacing \:id with the game's ID.
 
 ```bash
-curl -X GET http://localhost:3000/game/YOUR_GAME_ID
+curl -X GET http://localhost:3001/game/YOUR_GAME_ID
 ```
 
 ### Make a Guess
 
-<!-- Needs update for React UI -->
-
-To make a guess, send a POST request to `/game/:id/guess` with the `guess` parameter.
-
-Replace `:id` with the game's ID.
+Send a POST request to /game/:id/guess with a single alphanumeric guess parameter, replacing \:id with the game's ID.
 
 ```bash
-curl -X POST -d "guess=A" http://localhost:3000/game/YOUR_GAME_ID/guess
+curl -X POST -H "Content-Type: application/json" -d '{"guess": "A"}' http://localhost:3001/game/YOUR_GAME_ID/guess
+
 ```
 
 The guess should be a single alphanumeric character. You'll get a JSON response indicating the game's current state.
+
+Example of a JSON object of a completed game state:
+```json
+state: {
+    "id": "37a8a959-b2ca-4c89-ba52-deea7cfdfe08",
+    "letters": [
+      null, null, "'a'",
+      null, "'n'",  null,
+      null
+    ],
+    "guesses": [
+      "'a'", "'d'", "'e'",
+      "'f'", "'n'", "'r'",
+      "'s'", "'t'"
+    ],
+    "guessesRemaining": 0,
+    "userWon": false,
+    "userLost": true,
+    "userFinished": true,
+    "revealedWord": "'plainly'"
+  }
+```
+
+## Architecture
+
+### Game Class
+
+Handles the logic for individual games, including managing guesses and tracking state.
+
+### Memory Class
+A simple in-memory database that stores game states.
+
+### Word Helper
+Provides random words for the game.
+
+### React Frontend
+Please check the [React repository](https://github.com/MMcBreezy/word-guessr-react) for details on the frontend UI.
 
 ## Contributing
 

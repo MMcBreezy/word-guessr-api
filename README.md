@@ -91,8 +91,10 @@ A simple in-memory database that stores game states.
 
 ### Word Helper
 
-Provides random words for the game.
+Provides random words for the game. This component reads from a list of words stored in a .txt file and returns a random word when needed for a new game.
 
+Future Plans 🌟
+We are excited to share that we are planning on integrating OpenAI's API as the source for random words. This will add a layer of complexity and variety to the game. If you're interested in this feature, keep an eye on the openai-api branch for the latest updates!
 ### React Frontend
 
 Please check the [React repository](https://github.com/MMcBreezy/word-guessr-react) for details on the frontend UI.

@@ -9,16 +9,20 @@ const { Game } = require('../objects')
 
 // POST /game
 // Create a new game
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   console.log('POST /game')
 
-  // create and save a new game
-  const game = new Game()
-  req.games.set(game.id, game)
-
-  res.status(201).json(game.state())
+  try {
+    // create and save a new game
+    const game = await Game.newGame();
+    req.games.set(game.id, game);
+  
+    res.status(201).json(game.state());
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error creating new game");
+  }
 })
-
 // BEGIN middleware to attach a game to the request
 // Routes below this line require a valid id
 router.use('/:id', (req, res, next) => {
